@@ -3,10 +3,19 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User } from "lucide-react";
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would connect to your auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Set to true for demonstration
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -49,11 +58,44 @@ const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <Button variant="ghost" size="icon" asChild>
-                <Link to="/profile">
-                  <User size={20} />
-                </Link>
-              </Button>
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="bg-transparent">
+                      <User size={20} />
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[200px] gap-3 p-4">
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/view-profile"
+                              className="block p-2 hover:bg-gray-100 rounded-md"
+                            >
+                              View Profile
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/profile"
+                              className="block p-2 hover:bg-gray-100 rounded-md"
+                            >
+                              Edit Profile
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <Button variant="ghost" size="sm" className="w-full justify-start">
+                            Logout
+                          </Button>
+                        </li>
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
             )}
           </div>
 
@@ -92,13 +134,22 @@ const Navbar = () => {
               Discover
             </Link>
             {isLoggedIn && (
-              <Link 
-                to="/chat/1" 
-                className="block text-gray-700 hover:text-skill-purple font-medium"
-                onClick={toggleMenu}
-              >
-                Messages
-              </Link>
+              <>
+                <Link 
+                  to="/chat/1" 
+                  className="block text-gray-700 hover:text-skill-purple font-medium"
+                  onClick={toggleMenu}
+                >
+                  Messages
+                </Link>
+                <Link 
+                  to="/view-profile" 
+                  className="block text-gray-700 hover:text-skill-purple font-medium"
+                  onClick={toggleMenu}
+                >
+                  View Profile
+                </Link>
+              </>
             )}
             <div className="pt-4 border-t border-gray-200 flex flex-col space-y-3">
               {!isLoggedIn ? (
@@ -111,9 +162,14 @@ const Navbar = () => {
                   </Button>
                 </>
               ) : (
-                <Button variant="outline" className="w-full" asChild>
-                  <Link to="/profile" onClick={toggleMenu}>My Profile</Link>
-                </Button>
+                <>
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link to="/profile" onClick={toggleMenu}>Edit Profile</Link>
+                  </Button>
+                  <Button variant="ghost" className="w-full">
+                    Logout
+                  </Button>
+                </>
               )}
             </div>
           </div>
